@@ -435,20 +435,53 @@ const { fotos } = data;
 
 var dataCategorias = {
 	categorias: [
-		{ id: 'america', nombre: 'America', numeroFotos: fotos['america'].length, imagenPortada: '../../img/america.jpg' },
-		{ id: 'europa', nombre: 'Europa', numeroFotos: fotos['europa'].length, imagenPortada: '../../img/europa.jpg' },
-		{ id: 'africa', nombre: 'África', numeroFotos: fotos['africa'].length, imagenPortada: '../../img/africa.jpg' },
-		{ id: 'asia', nombre: 'Asia', numeroFotos: fotos['asia'].length, imagenPortada: '../../img/asia.jpg' },
-		{ id: 'oceania', nombre: 'Oceania', numeroFotos: fotos['oceania'].length, imagenPortada: '../../img/oceaniajpg' },
+		{ id: 'america', nombre: 'America', numeroFotos: fotos['america'].length, imagenPortada: './img/america.jpg' },
+		{ id: 'europa', nombre: 'Europa', numeroFotos: fotos['europa'].length, imagenPortada: './img/europa.jpg' },
+		{ id: 'africa', nombre: 'África', numeroFotos: fotos['africa'].length, imagenPortada: './img/africa.jpg' },
+		{ id: 'asia', nombre: 'Asia', numeroFotos: fotos['asia'].length, imagenPortada: './img/asia.jpg' },
+		{ id: 'oceania', nombre: 'Oceania', numeroFotos: fotos['oceania'].length, imagenPortada: './img/oceania.jpg' },
 		{
 			id: 'antartida',
 			nombre: 'Antártida',
 			numeroFotos: fotos['antartida'].length,
-			imagenPortada: '../../img/antartida.jpg',
+			imagenPortada: './img/antartida.jpg',
 		},
 	],
 };
 
-console.log(dataCategorias);
+// TODO PERQUÈ VOLEM INSERTAR EL CODI HTML AMB JAVASCRIPT?
 
-console.log('Hola Ramon');
+const {categorias} = dataCategorias; // Desestructuración de objetos. Extraemos la propiedad "categorias" de un objecto llamado "dataCategorias", y se asigna a una variable llamada "categorias".
+const contenedorCategorias$1 = document.getElementById('categorias'); // Cogemos el codigo HTML con ID = categorias
+
+categorias.forEach((categoria) => { // Por cada categoria (del Array) ejecutamos este codigo:
+    const nuevaCategoria = document.createElement('a'); // Creamos un enlaze en el HTML
+    const plantilla = ` 
+        <img class="categoria__img" src="${categoria.imagenPortada}" alt="" />
+        <div class="categoria__datos">
+            <p class="categoria__nombre">${categoria.nombre}</p>
+            <p class="categoria__numero-fotos">${categoria.numeroFotos} Fotos</p>
+        </div>
+    `; // Creamos una plantilla de código HTML
+
+    nuevaCategoria.innerHTML = plantilla; // insertamos el codigo HTML creado antes en el HTML
+    nuevaCategoria.classList.add('categoria'); // añadimos una clase
+    nuevaCategoria.href = "#"; // añadimos un href al enlaze
+    nuevaCategoria.dataset.categoria = categoria.id; // 
+
+    contenedorCategorias$1.append(nuevaCategoria); // Añadimos el código creado al contenedor de ID=categorias 
+});
+
+// AQUÍ queremos que al clicar sobre una categoria, se nos abra la GALERIA.
+
+const contenedorCategorias = document.getElementById('categorias');
+const galeria = document.getElementById('galeria');
+
+contenedorCategorias.addEventListener('click', (e) => { // El evento se propaga a los HIJOS!
+    e.preventDefault(); // para que NO nos suba la pagina hacia arriba!
+
+    if (e.target.closest('a')) {
+        galeria.classList.add('galeria--active');
+        document.body.style.overflow = 'hidden';
+    }
+});
